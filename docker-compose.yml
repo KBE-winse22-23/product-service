@@ -1,0 +1,54 @@
+version: "1.0"
+
+services:
+  app:
+    container_name: product-microservice
+    command: java -jar target/product-microservice-0.0.1-SNAPSHOT.jar
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9001"
+    depends_on:
+      - database-product
+      - rabbitmq-container
+    volumes:
+      - ./:/app/app
+    links:
+      - database-product
+    networks:
+      - internal
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - spring_rabbitmq_host=rabbitmq-container
+      - spring_rabbitmq_port=5672
+
+  database-product:
+    image: postgres
+    container_name: database-product
+    expose:
+      - "5431"
+    ports:
+      - "5431:5431"
+    volumes:
+      - ./:/app/
+    command: -p 5431
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=product_db
+    networks:
+      - internal
+
+  rabbitmq-container:
+    image: rabbitmq:3.11-management
+    hostname: rabbitmq-container
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - internal
+
+networks:
+  internal:
+    name: internal

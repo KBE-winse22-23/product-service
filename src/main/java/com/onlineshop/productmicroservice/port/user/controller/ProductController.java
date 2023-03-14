@@ -5,6 +5,8 @@ import com.onlineshop.productmicroservice.core.app.service.interfaces.IAppServic
 import com.onlineshop.productmicroservice.core.domain.model.CustomMessage;
 import com.onlineshop.productmicroservice.core.domain.model.Product;
 import com.onlineshop.productmicroservice.core.domain.service.interfaces.IProductService;
+import com.onlineshop.productmicroservice.port.user.exception.AlreadyExistsException;
+import com.onlineshop.productmicroservice.port.user.exception.EmptyFieldException;
 import com.onlineshop.productmicroservice.port.user.exception.NotFoundException;
 import com.onlineshop.productmicroservice.port.user.producer.ProductProducer;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,7 +51,7 @@ public class ProductController {
             description = "This End Point takes a Product Object as a Request Body and Saves it in the Database"
     )
     @PostMapping()
-    public Product saveProduct(@RequestBody Product product){
+    public Product saveProduct(@RequestBody Product product) throws AlreadyExistsException {
         return productService.saveProduct(product);
     }
 
@@ -88,6 +90,11 @@ public class ProductController {
         return productService.deleteProduct(productId);
     }
 
+    @PutMapping
+    public Product updateProductQuantity(@RequestParam Long productId, @RequestParam int quantity) throws NotFoundException {
+        return productService.updateProductQuantity(productId, quantity);
+    }
+
 
     ///////////////////////////////////////////////////////////
     ///////////////////// PRODUCER ////////////////////////////
@@ -104,7 +111,7 @@ public class ProductController {
             tags = {"Product Message Producer"}
     )
     @PostMapping("/send-product-to-cart")
-    public String sendProductToCart(@RequestBody SendMessageToCartDto productAndUserInfo){
+    public String sendProductToCart(@RequestBody SendMessageToCartDto productAndUserInfo) throws EmptyFieldException {
         return appService.sendProductToCart(productAndUserInfo);
     }
 }

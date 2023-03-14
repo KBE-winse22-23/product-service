@@ -2,6 +2,7 @@ package com.onlineshop.productmicroservice.port.user.advice;
 
 
 import com.onlineshop.productmicroservice.core.domain.model.ErrorMessage;
+import com.onlineshop.productmicroservice.port.user.exception.AlreadyExistsException;
 import com.onlineshop.productmicroservice.port.user.exception.EmptyFieldException;
 import com.onlineshop.productmicroservice.port.user.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND, notFoundException.getMessage());
 
         return  ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorMessage);
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ErrorMessage> alreadyExistsException(AlreadyExistsException alreadyExistsException, WebRequest webRequest){
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, alreadyExistsException.getMessage());
+
+        return  ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                 .body(errorMessage);
     }
 

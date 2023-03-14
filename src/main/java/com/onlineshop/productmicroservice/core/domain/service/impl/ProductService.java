@@ -3,6 +3,7 @@ package com.onlineshop.productmicroservice.core.domain.service.impl;
 import com.onlineshop.productmicroservice.core.domain.model.Product;
 import com.onlineshop.productmicroservice.core.domain.service.interfaces.IProductRepository;
 import com.onlineshop.productmicroservice.core.domain.service.interfaces.IProductService;
+import com.onlineshop.productmicroservice.port.user.exception.AlreadyExistsException;
 import com.onlineshop.productmicroservice.port.user.exception.NotFoundException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,10 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product saveProduct(Product product) {
+    public Product saveProduct(Product product) throws AlreadyExistsException {
+        if(productRepository.findByProductId(product.getProductId()).isPresent()){
+            throw new AlreadyExistsException("Product with the given ProductId " + product.getProductId() + " already exists!");
+        }
         return productRepository.save(product);
     }
 
@@ -77,7 +81,7 @@ public class ProductService implements IProductService {
     @Override
     public String deleteProduct(Long productId) throws NotFoundException {
 
-        Optional<Product> productDB = productRepository.findById(productId);
+        Optional<Product> productDB = productRepository.findByProductId(productId);
 
         if(productDB.isEmpty()){
             throw new NotFoundException("Product with the given " + productId + " is not founded!");

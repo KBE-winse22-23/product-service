@@ -1,6 +1,7 @@
 package com.onlineshop.productmicroservice.core.domain.service.interfaces;
 
 import com.onlineshop.productmicroservice.core.domain.model.Product;
+import com.onlineshop.productmicroservice.port.user.exception.AlreadyExistsException;
 import com.onlineshop.productmicroservice.port.user.exception.NotFoundException;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public interface IProductService {
     List<Product> getProducts();
 
-    Product saveProduct(Product product);
+    Product saveProduct(Product product) throws AlreadyExistsException;
 
     Product getProductById(Long id) throws NotFoundException;
 

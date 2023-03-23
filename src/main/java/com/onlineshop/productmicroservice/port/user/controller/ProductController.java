@@ -10,7 +10,6 @@ import com.onlineshop.productmicroservice.port.user.exception.EmptyFieldExceptio
 import com.onlineshop.productmicroservice.port.user.exception.NotFoundException;
 import com.onlineshop.productmicroservice.port.user.producer.ProductProducer;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +31,7 @@ public class ProductController {
 
     @Autowired
     private ProductProducer productProducer;
+
 
     @Operation(
             tags = {"Product"},

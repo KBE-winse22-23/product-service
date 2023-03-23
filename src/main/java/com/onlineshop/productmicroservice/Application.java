@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @OpenAPIDefinition(
 		info = @Info(title = "Product Microservice", version = "1.0.0"),
-		servers = {@Server(url = "http://localhost:8080"), @Server(url = "http://example.com")},
+		servers = {@Server(url = "http://localhost:9001")},
 		tags = {@Tag(name = "Product", description = "This is Product Microservice Controller End Points ")}
 )
 public class Application {
